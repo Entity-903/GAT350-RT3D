@@ -1,4 +1,4 @@
-#include "World02.h"
+#include "World03.h"
 #include "Framework/Framework.h"
 #include "Renderer/Renderer.h"
 #include "Input/InputSystem.h"
@@ -7,42 +7,11 @@
 
 namespace nc
 {
-    bool World02::Initialize()
+    bool World03::Initialize()
     {
-        // shaders
-        const char* vertexShader =
-            "#version 430\n"
-            "layout (location=0) in vec3 position;"
-            "layout (location=1) in vec3 color;"
-            "layout (location=0) out vec3 ocolor;"
-            "void main() {"
-            "  ocolor = color;"
-            "  gl_Position = vec4(position, 1.0);"
-            "}";
 
-
-
-        const char* fragmentShader =
-            "#version 430\n"
-            "layout (location=0) in vec3 color;"
-            "out vec4 ocolor;"
-            "void main() {"
-            "  ocolor = vec4(color, 1);"
-            "}";
-
-        GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vs, 1, &vertexShader, NULL);
-        glCompileShader(vs);
-
-        GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fs, 1, &fragmentShader, NULL);
-        glCompileShader(fs);
-
-        GLuint program = glCreateProgram();
-        glAttachShader(program, vs);
-        glAttachShader(program, fs);
-        glLinkProgram(program);
-        glUseProgram(program);
+        m_program = GET_RESOURCE(Program, "shaders/unlit_color.prog");
+        m_program->Use();
 
 #ifdef INTERLEAVE
         // vertex data
@@ -125,11 +94,11 @@ namespace nc
         return true;
     }
 
-    void World02::Shutdown()
+    void World03::Shutdown()
     {
     }
 
-    void World02::Update(float dt)
+    void World03::Update(float dt)
     {
         //m_angle += 90 * dt;
         for (int i = 0; i < m_positions.size(); i++) {
@@ -143,9 +112,12 @@ namespace nc
         m_angle += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_RIGHT) ? -dt * 90 : 0;
 
         m_time += dt;
+
+        GLint uniform = glGetUniformLocation(m_program->m_program, "time");
+        glUniform1f(uniform, m_time);
     }
 
-    void World02::Draw(Renderer& renderer)
+    void World03::Draw(Renderer& renderer)
     {
         // pre-render
         renderer.BeginFrame();
