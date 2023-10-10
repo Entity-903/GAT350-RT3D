@@ -8,6 +8,5 @@ uniform float time;
 
 void main()
 {
-	vec3 ncolor = vec3(color.r * (sin(time) + 1) * 0.5, color.g, color.b);
-	ocolor = vec4(ncolor, 1);
+	ocolor = vec4(color, 1);
 }
