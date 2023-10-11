@@ -14,11 +14,13 @@ namespace nc
 		void Draw(Renderer& renderer) override;
 
 	private:
-		float m_time; float m_speed = 5;
+		float m_time;
+		float m_speed = 5;
 
 		Transform m_transform;
 
 		GLuint m_vao = 0;
 		res_t<Program> m_program;
+		res_t<Texture> m_texture;
 	};
 }
