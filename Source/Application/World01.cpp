@@ -41,6 +41,7 @@ namespace nc
         renderer.BeginFrame();
 
         // render
+        
         for (int i = 0; i < 10; i++)
         {
             glPushMatrix();
