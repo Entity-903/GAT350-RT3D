@@ -21,6 +21,12 @@ namespace nc
 
         // vertex data
         float vertexData[] = {
+           //-0.8f, -0.8f,  0.0f,  1.0f, 0.0f, 0.0f, 0.0f,
+           //-0.8f,  0.8f,  0.0f,  0.0f, 1.0f, 0.0f, 1.0f,
+           // 0.8f, -0.8f,  0.0f,  0.0f, 0.0f, 1.0f, 0.0f,
+           // 0.8f,  0.8f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f
+
+
             -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
              -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
              0.5f,  0.5f, 0.0f, 0.67843f, 0.84706f, 0.90196f, 1, 1,
@@ -30,30 +36,11 @@ namespace nc
              -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0, 0
         };
 
-        GLuint vbo;
-        glGenBuffers(1, &vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
-
-        glGenVertexArrays(1, &m_vao);
-        glBindVertexArray(m_vao);
-
-        glBindVertexBuffer(0, vbo, 0, 8 * sizeof(GLfloat));
-        
-        // vertex
-        glEnableVertexAttribArray(0);
-        glVertexAttribFormat(0, 3, GL_FLOAT, GL_FALSE, 0);
-        glVertexAttribBinding(0, 0);
-
-        // color
-        glEnableVertexAttribArray(1);
-        glVertexAttribFormat(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat));
-        glVertexAttribBinding(1, 0);
-
-        // texcoord
-        glEnableVertexAttribArray(2);
-        glVertexAttribFormat(2, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat));
-        glVertexAttribBinding(2, 0);
+        m_vertexBuffer = GET_RESOURCE(VertexBuffer, "vb");
+        m_vertexBuffer->CreateVertexBuffer(sizeof(vertexData), 6, vertexData);
+        m_vertexBuffer->SetAttribute(0, 3, 8 * sizeof(GLfloat), 0);                  // position 
+        m_vertexBuffer->SetAttribute(1, 3, 8 * sizeof(GLfloat), 3 * sizeof(float));  // color 
+        m_vertexBuffer->SetAttribute(2, 2, 8 * sizeof(GLfloat), 6 * sizeof(float));  // texcoord
 
         return true;
     }
@@ -109,9 +96,7 @@ namespace nc
         renderer.BeginFrame();
 
         // render
-        glBindVertexArray(m_vao);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-
+        m_vertexBuffer->Draw(GL_TRIANGLES); // originally GL_TRIANGLES
         ENGINE.GetSystem<Gui>()->Draw();
 
         // post-render
