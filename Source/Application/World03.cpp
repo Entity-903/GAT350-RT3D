@@ -11,22 +11,10 @@ namespace nc
 {
     bool World03::Initialize()
     {
-
-        m_program = GET_RESOURCE(Program, "shaders/unlit_texture.prog");
-        m_program->Use();
-
-        m_texture = GET_RESOURCE(Texture, "textures/llama.jpg");
-        m_texture->Bind();
-        m_texture->SetActive(GL_TEXTURE0);
+        m_material = GET_RESOURCE(Material, "materials/quad.mtrl");
 
         // vertex data
         float vertexData[] = {
-           //-0.8f, -0.8f,  0.0f,  1.0f, 0.0f, 0.0f, 0.0f,
-           //-0.8f,  0.8f,  0.0f,  0.0f, 1.0f, 0.0f, 1.0f,
-           // 0.8f, -0.8f,  0.0f,  0.0f, 0.0f, 1.0f, 0.0f,
-           // 0.8f,  0.8f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f
-
-
             -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
              -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
              0.5f,  0.5f, 0.0f, 0.67843f, 0.84706f, 0.90196f, 1, 1,
@@ -73,19 +61,19 @@ namespace nc
 
         m_time += dt;
 
-        m_program->SetUniform("offset", glm::vec2{ m_time, 0 });
-        m_program->SetUniform("tiling", glm::vec2{ 20, 10 });
+        m_material->ProcessGui();
+        m_material->Bind();
 
         // model matrix
-        m_program->SetUniform("model", m_transform.GetMatrix());
+        m_material->GetProgram()->SetUniform("model", m_transform.GetMatrix());
 
         // view matrix
         glm::mat4 view = glm::lookAt(glm::vec3{ 0, 0, 3}, glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 });
-        m_program->SetUniform("view", view);
+        m_material->GetProgram()->SetUniform("view", view);
 
         // projection
         glm::mat4 projection = glm::perspective(glm::radians(70.0f), 800.0f / 600.0f, 0.01f, 100.0f);
-        m_program->SetUniform("projection", projection);
+        m_material->GetProgram()->SetUniform("projection", projection);
 
         ENGINE.GetSystem<Gui>()->EndFrame();
     }

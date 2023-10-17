@@ -1,0 +1,12 @@
+{
+  "program":"shaders/unlit_multi_texture.prog",
+  "textures": [ "textures/DonaldTrump.jpg", "textures/DonaldTrumpDeath.jpg" ],
+  "color":[
+      1,
+      1,
+      1,
+      1
+    ],
+  "tiling": [ 1, 1 ],
+  "offset": [ 0, 0 ]
+}
