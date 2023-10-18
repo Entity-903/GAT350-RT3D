@@ -1,6 +1,6 @@
 {
   "program":"shaders/unlit_multi_texture.prog",
-  "textures": [ "textures/DonaldTrump.jpg", "textures/DonaldTrumpDeath.jpg" ],
+  "textures": [ "textures/JoeBiden.jpg", "textures/JoeBidenDeath.jpg" ],
   "color":[
       1,
       1,

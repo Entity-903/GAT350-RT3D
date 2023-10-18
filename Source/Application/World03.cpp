@@ -24,7 +24,7 @@ namespace nc
              -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0, 0
         };
 
-        m_vertexBuffer = GET_RESOURCE(VertexBuffer, "vb");
+        m_vertexBuffer = std::make_shared<VertexBuffer>();
         m_vertexBuffer->CreateVertexBuffer(sizeof(vertexData), 6, vertexData);
         m_vertexBuffer->SetAttribute(0, 3, 8 * sizeof(GLfloat), 0);                  // position 
         m_vertexBuffer->SetAttribute(1, 3, 8 * sizeof(GLfloat), 3 * sizeof(float));  // color 
@@ -84,7 +84,7 @@ namespace nc
         renderer.BeginFrame();
 
         // render
-        m_vertexBuffer->Draw(GL_TRIANGLES); // originally GL_TRIANGLES
+        m_vertexBuffer->Draw(GL_TRIANGLES); 
         ENGINE.GetSystem<Gui>()->Draw();
 
         // post-render

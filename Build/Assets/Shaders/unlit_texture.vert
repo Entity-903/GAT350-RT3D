@@ -15,6 +15,7 @@ void main()
 {
 	ocolor = color;
 	otexcoord = texcoord;
+
 	mat4 mvp = projection * view * model;
 	gl_Position = mvp * vec4(position, 1.0);
 }
