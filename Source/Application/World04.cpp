@@ -45,9 +45,15 @@ namespace nc
         ENGINE.GetSystem<Gui>()->BeginFrame();
 
         ImGui::Begin("Transform");
-        ImGui::DragFloat3("Position", &m_transform.position[0]);
+        ImGui::DragFloat3("Position", &m_transform.position[0], 0.1f);
         ImGui::DragFloat3("Scale", &m_transform.scale[0]);
-        ImGui::DragFloat3("Rotate", &m_transform.rotation[0]);
+        ImGui::DragFloat3("Rotate", &m_transform.rotation[0], 0.1f);
+        ImGui::End();
+
+        ImGui::Begin("Light");
+        ImGui::DragFloat3("Position", &position[0], 0.1f);
+        ImGui::ColorEdit3("Color", &color[0]);
+        ImGui::ColorEdit3("ambientLight", &ambientLight[0], 0.1f);
         ImGui::End();
 
         m_transform.position.x += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_A) ? m_speed * -dt : 0;
@@ -57,8 +63,10 @@ namespace nc
         m_transform.position.z += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_UP) ? m_speed * dt : 0;
         m_transform.position.z += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_DOWN) ? m_speed * -dt : 0;
 
-        m_transform.rotation += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_LEFT) ? dt * 90 : 0;
-        m_transform.rotation += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_RIGHT) ? -dt * 90 : 0;
+        m_transform.rotation.y += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_J) ? dt * 90 : 0;
+        m_transform.rotation.y += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_L) ? -dt * 90 : 0;
+        m_transform.rotation.x += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_I) ? dt * 90 : 0;
+        m_transform.rotation.x += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_K) ? -dt * 90 : 0;
 
         m_time += dt;
 
@@ -77,6 +85,15 @@ namespace nc
         glm::mat4 projection = glm::perspective(glm::radians(70.0f), 800.0f / 600.0f, 0.01f, 100.0f);
         material->GetProgram()->SetUniform("projection", projection);
 
+        // position vector
+        material->GetProgram()->SetUniform("light.position", position);
+
+        // color vector
+        material->GetProgram()->SetUniform("light.color", color);
+
+        // ambientLight vector
+        material->GetProgram()->SetUniform("ambientLight", ambientLight);
+
         ENGINE.GetSystem<Gui>()->EndFrame();
     }
 
@@ -86,7 +103,9 @@ namespace nc
         renderer.BeginFrame();
 
         // render
-        m_model->Draw(GL_TRIANGLES); // originally GL_TRIANGLES
+        // 
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // for wire frame
+        m_model->Draw();// GL_TRIANGLES); // originally GL_TRIANGLES
         ENGINE.GetSystem<Gui>()->Draw();
 
         // post-render

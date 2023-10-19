@@ -21,9 +21,8 @@ namespace nc
 		Transform m_transform;
 		res_t<Model> m_model;
 
-		res_t<Program> m_program;
-		res_t<Texture> m_texture;
-		res_t<Material> m_material;
-		res_t<VertexBuffer> m_vertexBuffer;
+		glm::vec3 color{ 1, 0, 1};
+		glm::vec3 position{0, 8, 0};
+		glm::vec3 ambientLight{0.2, 0.2, 0.2};
 	};
 }
