@@ -11,27 +11,17 @@ namespace nc
 {
     bool World04::Initialize()
     {
-        auto material = GET_RESOURCE(Material, "materials/Squirrel.mtrl");
+        auto material = GET_RESOURCE(Material, "materials/grid.mtrl");
         m_model = std::make_shared<Model>();
         m_model->SetMaterial(material);
-        m_model->Load("models/squirrel.glb");
+        m_model->Load("models/plane.obj");
+        m_transform.position.y = -1;
 
-        //// vertex data
-        //float vertexData[] = {
-        //    -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-        //     -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-        //     0.5f,  0.5f, 0.0f, 0.67843f, 0.84706f, 0.90196f, 1, 1,
-
-        //     0.5f, 0.5f, 0.0f, 0.67843f, 0.84706f, 0.90196f, 1, 1,
-        //     0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1, 0,
-        //     -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0, 0
-        //};
-
-        //vertexBuffer = std::make_shared<VertexBuffer>();
-        //vertexBuffer->CreateVertexBuffer(sizeof(vertexData), 6, vertexData);
-        //vertexBuffer->SetAttribute(0, 3, 8 * sizeof(GLfloat), 0);                  // position 
-        //vertexBuffer->SetAttribute(1, 3, 8 * sizeof(GLfloat), 3 * sizeof(float));  // color 
-        //vertexBuffer->SetAttribute(2, 2, 8 * sizeof(GLfloat), 6 * sizeof(float));  // texcoord
+        m_light.type = light_t::eType::Point;
+        m_light.position = glm::vec3{ 0, 5, 0 };
+        m_light.direction = glm::vec3{ 0, - 1, 0 };
+        m_light.color = glm::vec3{ 1 };
+        m_light.cutoff = 30.0f;
 
         return true;
     }
@@ -51,8 +41,13 @@ namespace nc
         ImGui::End();
 
         ImGui::Begin("Light");
-        ImGui::DragFloat3("Position", &position[0], 0.1f);
-        ImGui::ColorEdit3("Color", &color[0]);
+        const char* types[] = { "Point", "Directional", "Spot" };
+        ImGui::Combo("Type", (int*)(&m_light.type), types, 3);
+
+        if (m_light.type != light_t::Directional) ImGui::DragFloat3("Position", glm::value_ptr(m_light.position), 0.1f);
+        if (m_light.type != light_t::Point) ImGui::DragFloat3("Direction", glm::value_ptr(m_light.direction));
+        if (m_light.type == light_t::Spot) ImGui::DragFloat("Cutoff", &m_light.cutoff, 1, 0, 90);
+        ImGui::ColorEdit3("Color", glm::value_ptr(m_light.color));
         ImGui::ColorEdit3("ambientLight", &ambientLight[0], 0.1f);
         ImGui::End();
 
@@ -60,13 +55,15 @@ namespace nc
         m_transform.position.x += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_D) ? m_speed * dt : 0;
         m_transform.position.y += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_W) ? m_speed * dt : 0;
         m_transform.position.y += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_S) ? m_speed * -dt : 0;
-        m_transform.position.z += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_UP) ? m_speed * dt : 0;
-        m_transform.position.z += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_DOWN) ? m_speed * -dt : 0;
+        m_transform.position.z += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_Q) ? m_speed * dt : 0;
+        m_transform.position.z += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_E) ? m_speed * -dt : 0;
 
-        m_transform.rotation.y += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_J) ? dt * 90 : 0;
-        m_transform.rotation.y += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_L) ? -dt * 90 : 0;
         m_transform.rotation.x += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_I) ? dt * 90 : 0;
         m_transform.rotation.x += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_K) ? -dt * 90 : 0;
+        m_transform.rotation.y += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_J) ? dt * 90 : 0;
+        m_transform.rotation.y += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_L) ? -dt * 90 : 0;
+        m_transform.rotation.z += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_U) ? dt * 90 : 0;
+        m_transform.rotation.z += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_O) ? -dt * 90 : 0;
 
         m_time += dt;
 
@@ -82,17 +79,17 @@ namespace nc
         material->GetProgram()->SetUniform("view", view);
 
         // projection
-        glm::mat4 projection = glm::perspective(glm::radians(70.0f), 800.0f / 600.0f, 0.01f, 100.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(70.0f), (float)ENGINE.GetSystem<Renderer>()->GetWidth() / (float)ENGINE.GetSystem<Renderer>()->GetHeight(), 0.01f, 100.0f);
         material->GetProgram()->SetUniform("projection", projection);
 
-        // position vector
-        material->GetProgram()->SetUniform("light.position", position);
 
-        // color vector
-        material->GetProgram()->SetUniform("light.color", color);
-
-        // ambientLight vector
         material->GetProgram()->SetUniform("ambientLight", ambientLight);
+
+        material->GetProgram()->SetUniform("light.color", m_light.color);
+        material->GetProgram()->SetUniform("light.position", m_light.position);
+        material->GetProgram()->SetUniform("light.direction", m_light.direction);
+        material->GetProgram()->SetUniform("light.type", m_light.type);
+        material->GetProgram()->SetUniform("light.cutoff", glm::radians(m_light.cutoff));
 
         ENGINE.GetSystem<Gui>()->EndFrame();
     }

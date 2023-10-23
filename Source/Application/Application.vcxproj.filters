@@ -74,5 +74,11 @@
     <None Include="..\..\Build\Assets\Shaders\lit_texture.vert">
       <Filter>Shader</Filter>
     </None>
+    <None Include="..\..\Build\Assets\Shaders\lit_texture_gourand.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\lit_texture_gourand.vert">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>
