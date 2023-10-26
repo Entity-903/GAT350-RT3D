@@ -1,1 +1,5 @@
+INFO: Factory.h(76) Class registered: ModelComponent
+INFO: Factory.h(76) Class registered: LightComponent
+INFO: Factory.h(76) Class registered: EnginePhysicsComponent
+INFO: Factory.h(76) Class registered: Actor
 INFO: Main.cpp(10) Initialize Engine...

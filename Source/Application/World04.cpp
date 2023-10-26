@@ -12,10 +12,10 @@ namespace nc
 {
     bool World04::Initialize()
     {
-        auto material = GET_RESOURCE(Material, "materials/multi.mtrl");
+        auto material = GET_RESOURCE(Material, "materials/squirrel.mtrl");
         m_model = std::make_shared<Model>();
         m_model->SetMaterial(material);
-        m_model->Load("models/plane.obj");
+        m_model->Load("models/squirrel.glb", glm::vec3{ 0, -0.7f, 0 }, glm::vec3{ 0 }, glm::vec3{ 0.4f });
         m_transform.position.y = -1;
 
         for (int i = 0; i < 3; i++)
@@ -25,7 +25,7 @@ namespace nc
             m_lights[i].direction = glm::vec3{ 0, -1, 0 };
             m_lights[i].color = glm::rgbColor(glm::vec3{ randomf() * 360, 1, 1 });
             m_lights[i].intensity = 0.4f;
-            m_lights[i].range = 15.0f;
+            m_lights[i].range = 16.0f;
             m_lights[i].innerAngle = 10.0f;
             m_lights[i].outerAngle = 30.0f;
         }
@@ -41,10 +41,17 @@ namespace nc
     {
         ENGINE.GetSystem<Gui>()->BeginFrame();
 
-        ImGui::Begin("Transform");
-        ImGui::DragFloat3("Position", &m_transform.position[0], 0.1f);
-        ImGui::DragFloat3("Scale", &m_transform.scale[0]);
-        ImGui::DragFloat3("Rotate", &m_transform.rotation[0], 0.1f);
+
+
+        ImGui::Begin("Scene");
+        ImGui::ColorEdit3("Ambient Color", glm::value_ptr(ambientLight));
+        ImGui::Separator();
+
+        for (int i = 0; i < 3; i++)
+        {
+            std::string name = "light" + std::to_string(i);
+            if (ImGui::Selectable(name.c_str(), m_selected == i)) m_selected = i;
+        }
         ImGui::End();
 
         ImGui::Begin("Light");

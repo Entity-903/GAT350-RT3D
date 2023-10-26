@@ -12,6 +12,16 @@ out layout(location = 0) vec4 ocolor;
 
 layout(binding = 0) uniform sampler2D tex;
 
+float attenuation(in vec3 position1, in vec3 position2, in float range)
+{
+	float distanceSqr = dot(position1 - position2, position1 - position2);
+	float rangeSqr = pow(range, 2.0);
+	float attenuation = max(0, 1 - pow((distanceSqr / rangeSqr), 2.0));
+	attenuation = pow(attenuation, 2.0);
+ 
+	return attenuation;
+}
+
 uniform struct Material {
 	vec3 diffuse;
 	vec3 specular;
@@ -116,16 +126,19 @@ vec3 ads(in vec3 position, in vec3 normal) {
 
 void main()
 {
-	// Get color from texture
 	vec4 texcolor = texture(tex, texcoord);
-	// Multiply texture color by lighting
-	ocolor = vec4(ambientLight, 1);
-
-	for(int i = 0; i < numLights; i++) {
+	// set ambient light
+	ocolor = vec4(ambientLight, 1) * texcolor;
+ 
+	// set lights
+	for (int i = 0; i < numLights; i++)
+	{
 		vec3 diffuse;
 		vec3 specular;
-
+ 
+		float attenuation = (lights[i].type == DIRECTIONAL) ? 1 : attenuation(lights[i].position, position, lights[i].range);
+ 
 		phong(lights[i], position, normal, diffuse, specular);
-		ocolor += (vec4(diffuse, 1) * texcolor) + vec4(specular, 1);
+		ocolor += ((vec4(diffuse, 1) * texcolor) + vec4(specular, 1)) * lights[i].intensity * attenuation;
 	}
 }
