@@ -1,5 +1,7 @@
-INFO: Factory.h(76) Class registered: ModelComponent
-INFO: Factory.h(76) Class registered: LightComponent
-INFO: Factory.h(76) Class registered: EnginePhysicsComponent
-INFO: Factory.h(76) Class registered: Actor
+INFO: Factory.h(74) Class registered: ModelComponent
+INFO: Factory.h(74) Class registered: LightComponent
+INFO: Factory.h(74) Class registered: EnginePhysicsComponent
+INFO: Factory.h(74) Class registered: CameraComponent
+INFO: Factory.h(74) Class registered: Actor
 INFO: Main.cpp(10) Initialize Engine...
+ERROR: Factory.h(96) Class not found in Factory: Light

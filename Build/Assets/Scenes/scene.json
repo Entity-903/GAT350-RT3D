@@ -1,0 +1,42 @@
+{
+	"actors": [
+		{
+			"type": "Actor",
+			"name": "actor1",
+			"persistent": true,
+			"transform": {
+				"position": [ 0, 0, 0 ],
+				"scale": [ 1, 1, 1 ],
+				"rotation": [ 0, 0, 0 ]
+			},
+			"components": [
+				{
+					"type": "ModelComponent",
+					"modelName": "models/squirrel.glb",
+					"materialName": "materials/squirrel.mtrl"
+				}
+			]
+		},
+		{
+			"type": "Light",
+			"name": "light1",
+			"persistent": true,
+			"transform": {
+				"position": [ 5, 0, 0 ],
+				"scale": [ 1, 1, 1 ],
+				"rotation": [ 0, 0, 0 ]
+			},
+			"components": [
+				{
+					"type": "LightComponent",
+					"lightType": "Point",
+					"color": [ 1, 1, 1, 1 ],
+					"intensity": 1,
+					"range": 20,
+					"innerAngle": 20,
+					"outerAngle": 30
+				}
+			]
+		}
+	]
+}

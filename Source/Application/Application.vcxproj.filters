@@ -11,6 +11,9 @@
     <Filter Include="Materials">
       <UniqueIdentifier>{100314ef-b79e-4144-a37f-502e5d56432e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{5e487e73-1f0a-4c7d-9ae3-4e1a908dd1ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -106,6 +109,9 @@
     </None>
     <None Include="..\..\Build\Assets\Materials\multi.mtrl">
       <Filter>Materials</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Scenes\scene.json">
+      <Filter>Scenes</Filter>
     </None>
   </ItemGroup>
 </Project>

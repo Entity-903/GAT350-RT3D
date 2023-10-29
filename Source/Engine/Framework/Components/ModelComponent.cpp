@@ -6,12 +6,21 @@ namespace nc
 {
 	CLASS_DEFINITION(ModelComponent)
 
-	//bool ModelComponent::Initialize()
-	//{
-	//	if (!modelName.empty()) model = GET_RESOURCE(Model, modelName);
+	bool ModelComponent::Initialize()
+	{
+		if (!modelName.empty())
+		{
+			model = std::make_shared<Model>();
+			model->Load(modelName);
+			//ADD_RESOURCE(modelName, model);
+		}
+		if (model && !materialName.empty())
+		{
+			model->SetMaterial(GET_RESOURCE(Material, materialName));
+		}
 
-	//	return true;
-	//}
+		return true;
+	}
 
 	void ModelComponent::Update(float dt)
 	{
@@ -19,11 +28,15 @@ namespace nc
 
 	void ModelComponent::Draw(Renderer& renderer)
 	{
-		//m_model->Draw(renderer, m_owner->transform);
+		auto material = model->GetMaterial();
+		material->Bind();
+		material->GetProgram()->SetUniform("model", m_owner->transform.GetMatrix());
+		model->Draw();
 	}
 
 	void ModelComponent::Read(const json_t& value)
 	{
 		READ_DATA(value, modelName);
+		READ_DATA(value, materialName);
 	}
 }

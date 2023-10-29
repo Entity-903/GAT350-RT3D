@@ -1,5 +1,4 @@
 #include "LightComponent.h"
-#include "Framework/Actor.h"
 
 namespace nc
 {
@@ -47,5 +46,12 @@ namespace nc
 	void LightComponent::Read(const nc::json_t& value)
 	{
 		// read json file
+		//READ_DATA(value, type);
+		//READ_DATA(value, lightType);
+		READ_DATA(value, color);
+		READ_DATA(value, intensity);
+		READ_DATA(value, range);
+		READ_DATA(value, innerAngle);
+		READ_DATA(value, outerAngle);
 	}
 }

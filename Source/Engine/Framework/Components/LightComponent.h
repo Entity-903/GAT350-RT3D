@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "Renderer/Program.h"
+#include "Framework/Actor.h"
 
 namespace nc
 {
