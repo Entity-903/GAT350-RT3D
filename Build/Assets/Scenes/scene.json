@@ -12,13 +12,13 @@
 			"components": [
 				{
 					"type": "ModelComponent",
-					"modelName": "models/squirrel.glb",
-					"materialName": "materials/squirrel.mtrl"
+					"modelName": "models/cube.obj",
+					"materialName": "materials/phong.mtrl"
 				}
 			]
 		},
 		{
-			"type": "Light",
+			"type": "Actor",
 			"name": "light1",
 			"persistent": true,
 			"transform": {

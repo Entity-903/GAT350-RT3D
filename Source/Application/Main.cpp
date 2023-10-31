@@ -7,6 +7,15 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+	nc::StringUtils stringUtils;
+
+	cout << stringUtils.ToUpper("beam me up") << "\n";
+	cout << stringUtils.ToLower("SEND ME DOWN") << "\n";
+	cout << stringUtils.IsEqualIgnoreCase("DiGiTaL hAlLuCiNaTiOnS", "dIgItAl HaLlUcInAtIoNs") << "\n";
+	cout << stringUtils.CreateUnique("Entity") << "\n";
+	cout << stringUtils.CreateUnique("Entity") << "\n";
+	cout << stringUtils.CreateUnique("Entity") << "\n";
+
 	INFO_LOG("Initialize Engine...")
 
 	//nc::MemoryTracker::Initialize();
@@ -17,6 +26,8 @@ int main(int argc, char* argv[])
 
 	auto world = make_unique<nc::World05>();
 	world->Initialize();
+
+	
 
 	// main loop
 	bool quit = false;
