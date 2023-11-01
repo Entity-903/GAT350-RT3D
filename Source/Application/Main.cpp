@@ -7,14 +7,13 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	nc::StringUtils stringUtils;
 
-	cout << stringUtils.ToUpper("beam me up") << "\n";
-	cout << stringUtils.ToLower("SEND ME DOWN") << "\n";
-	cout << stringUtils.IsEqualIgnoreCase("DiGiTaL hAlLuCiNaTiOnS", "dIgItAl HaLlUcInAtIoNs") << "\n";
-	cout << stringUtils.CreateUnique("Entity") << "\n";
-	cout << stringUtils.CreateUnique("Entity") << "\n";
-	cout << stringUtils.CreateUnique("Entity") << "\n";
+	cout << nc::StringUtils::ToUpper("beam me up") << "\n";
+	cout << nc::StringUtils::ToLower("SEND ME DOWN") << "\n";
+	cout << nc::StringUtils::IsEqualIgnoreCase("DiGiTaL hAlLuCiNaTiOnS", "dIgItAl HaLlUcInAtIoNs") << "\n";
+	cout << nc::StringUtils::CreateUnique("Entity") << "\n";
+	cout << nc::StringUtils::CreateUnique("Entity") << "\n";
+	cout << nc::StringUtils::CreateUnique("Entity") << "\n";
 
 	INFO_LOG("Initialize Engine...")
 
