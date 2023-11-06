@@ -1,5 +1,5 @@
 {
-  "program": "shaders/skybox.prog",
+  "program": "shaders/refraction.prog",
   "cubemap": "alternate_cubemap",
   "cubemaps": [
     "textures/alternate_cubemap/posx.jpg",
