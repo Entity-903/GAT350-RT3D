@@ -9,7 +9,7 @@ namespace nc
     {
         for (int i = 0; i < 10; i++)
         {
-            m_positions.push_back({ randomf(-1, 1), randomf(-1, 1) });
+            m_positions.push_back(glm::vec2{ randomf(-1, 1), randomf(-1, 1) });
         }
 
         return true;

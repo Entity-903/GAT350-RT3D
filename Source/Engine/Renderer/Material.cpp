@@ -109,7 +109,7 @@ namespace nc
 
 		if (cubemapTexture)
 		{
-			cubemapTexture->SetActive(GL_TEXTURE0);
+			cubemapTexture->SetActive(GL_TEXTURE4);
 			cubemapTexture->Bind();
 		}
 
