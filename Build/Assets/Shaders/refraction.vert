@@ -25,8 +25,6 @@ void main()
 	// refract view direction about vertex normal using index of refraction
 	otexcoord = refract(viewDir, normal, 1.0 / ior);
 
-	//otexcoord = position;
-
 	mat4 mvp = projection * view * model;
 	gl_Position = mvp * vec4(vposition, 1.0);
 }

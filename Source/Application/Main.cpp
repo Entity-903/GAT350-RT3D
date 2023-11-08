@@ -8,13 +8,6 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 
-	cout << nc::StringUtils::ToUpper("beam me up") << "\n";
-	cout << nc::StringUtils::ToLower("SEND ME DOWN") << "\n";
-	cout << nc::StringUtils::IsEqualIgnoreCase("DiGiTaL hAlLuCiNaTiOnS", "dIgItAl HaLlUcInAtIoNs") << "\n";
-	cout << nc::StringUtils::CreateUnique("Entity") << "\n";
-	cout << nc::StringUtils::CreateUnique("Entity") << "\n";
-	cout << nc::StringUtils::CreateUnique("Entity") << "\n";
-
 	INFO_LOG("Initialize Engine...")
 
 	//nc::MemoryTracker::Initialize();

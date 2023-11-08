@@ -170,5 +170,26 @@
     <None Include="..\..\Build\Assets\Materials\refraction.mtrl">
       <Filter>Materials</Filter>
     </None>
+    <None Include="..\..\Build\Assets\Shaders\unlit_sprite.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\unlit_sprite.prog">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\unlit_sprite.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Materials\sprite.mtrl">
+      <Filter>Materials</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\unlit_billboard.prog">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\unlit_billboard.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Materials\tree.mtrl">
+      <Filter>Materials</Filter>
+    </None>
   </ItemGroup>
 </Project>
