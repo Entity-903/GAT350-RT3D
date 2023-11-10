@@ -73,6 +73,10 @@
 					"type": "ModelComponent",
 					"modelName": "models/ogre.obj",
 					"materialName": "materials/ogre.mtrl"
+				},
+				{
+					"type": "RotateComponent",
+					"rotation": [ 90, 90, 90 ]
 				}
 			]
 		},

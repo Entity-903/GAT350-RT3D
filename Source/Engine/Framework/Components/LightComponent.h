@@ -17,14 +17,14 @@ namespace nc
 		void ProcessGui() override;
 
 	public:
-		enum eType
+		enum lightType
 		{
 			Point,
 			Directional,
 			Spot
 		};
 
-		eType type = eType::Point;
+		lightType lightType = lightType::Point;
 		glm::vec3 color{ 1 };
 		float intensity = 1;
 		float range = 20;

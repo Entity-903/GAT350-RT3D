@@ -15,7 +15,7 @@ namespace nc
 
 	void LightComponent::SetProgram(const res_t<Program> program, const std::string& name)
 	{
-		program->SetUniform(name + ".type", type);
+		program->SetUniform(name + ".type", lightType);
 		program->SetUniform(name + ".position", m_owner->transform.position);
 		program->SetUniform(name + ".direction", m_owner->transform.Forward());
 		program->SetUniform(name + ".color", color);
@@ -28,9 +28,9 @@ namespace nc
 	void LightComponent::ProcessGui()
 	{
 		const char* types[] = { "Point", "Directional", "Spot" };
-		ImGui::Combo("Type", (int*)(&type), types, 3);
+		ImGui::Combo("Type", (int*)(&lightType), types, 3);
 
-		if (type == Spot)
+		if (lightType == Spot)
 		{
 			ImGui::DragFloat("Inner Angle", &innerAngle, 1, 0, outerAngle);
 			ImGui::DragFloat("Outer Angle", &outerAngle, 1, innerAngle, 90);
@@ -38,7 +38,7 @@ namespace nc
 
 		ImGui::ColorEdit3("Color", glm::value_ptr(color));
 		ImGui::DragFloat("Intensity", &intensity, 0.1f, 0, 10);
-		if (type != Directional) ImGui::DragFloat("Range", &range, 0.1f, 0.1f, 50);
+		if (lightType != Directional) ImGui::DragFloat("Range", &range, 0.1f, 0.1f, 50);
 
 
 	}
@@ -46,8 +46,23 @@ namespace nc
 	void LightComponent::Read(const nc::json_t& value)
 	{
 		// read json file
-		//READ_DATA(value, type);
-		//READ_DATA(value, lightType);
+		std::string lightType = "";
+
+		READ_DATA(value, lightType);
+
+		if (lightType == "Point")
+		{
+			lightType = lightType::Point;
+		}
+		if (lightType == "Directional")
+		{
+			lightType = lightType::Directional;
+		}
+		if (lightType == "Spot")
+		{
+			lightType = lightType::Spot;
+		}
+
 		READ_DATA(value, color);
 		READ_DATA(value, intensity);
 		READ_DATA(value, range);
