@@ -1,6 +1,7 @@
 #pragma once
 #include "Resource.h"
 #include "Core/Logger.h"
+#include "Core/StringUtils.h"
 #include "Framework/Singleton.h"
 #include <map>
 #include <memory>
@@ -8,6 +9,7 @@
 #include <vector>
 
 #define GET_RESOURCE(type, filename, ...) nc::ResourceManager::Instance().Get<type>(filename, __VA_ARGS__)
+#define ADD_RESOURCE(type, name, resource) nc::ResourceManager::Instance().Add<type>(name, resource)
 
 namespace nc
 {
@@ -21,6 +23,9 @@ namespace nc
 		res_t<T> Get(const std::string& filename, TArgs ... args);
 
 		template<typename T>
+		bool Add(const std::string& name, res_t<T> resource);
+
+		template<typename T>
 		std::vector<res_t<T>>  GetAllOfType();
 
 	private:
@@ -30,26 +35,45 @@ namespace nc
 	template<typename T, typename ...TArgs>
 	inline res_t<T> ResourceManager::Get(const std::string& filename, TArgs ...args)
 	{
+		std::string lowerFileName = StringUtils::ToLower(filename);
+
 		// find resource in resources map
-		if (m_resources.find(filename) != m_resources.end())
+		if (m_resources.find(lowerFileName) != m_resources.end())
 		{
 			// return resource
-			return std::dynamic_pointer_cast<T>(m_resources[filename]);
+			return std::dynamic_pointer_cast<T>(m_resources[lowerFileName]);
 		}
 
 		// resource not in resources map, create resource
 		res_t<T> resource = std::make_shared<T>();
-		if (!resource->Create(filename, args...))
+		if (!resource->Create(lowerFileName, args...))
 		{
 			// resource not created
-			WARNING_LOG("Could not create resource: " << filename);
+			WARNING_LOG("Could not create resource: " << lowerFileName);
 			return res_t<T>();
 		}
 
 		// add resource to resource map, return resource
-		m_resources[filename] = resource;
+		Add(lowerFileName, resource);
 		return resource;
 	}
+
+	template<typename T>
+	inline bool ResourceManager::Add(const std::string& name, res_t<T> resource)
+	{
+		std::string lowerName = StringUtils::ToLower(name);
+
+		if (m_resources.find(lowerName) != m_resources.end())
+		{
+			WARNING_LOG("Resource already exists: " << lowerName);
+			return false;
+		}
+
+		m_resources[lowerName] = resource;
+
+		return true;
+	}
+
 	template<typename T>
 	inline std::vector<res_t<T>> ResourceManager::GetAllOfType()
 	{
