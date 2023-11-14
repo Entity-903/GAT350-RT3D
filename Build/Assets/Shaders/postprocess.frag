@@ -30,6 +30,8 @@ vec4 colortint(in vec4 color)
 	return vec4(vec3(color) * tint, color.a);
 }
 
+// Grain/Scanline needs to be mplemented
+
 void main()
 {
 	vec4 baseColor = texture(screenTex, texcoord);

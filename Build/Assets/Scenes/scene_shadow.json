@@ -1,0 +1,111 @@
+{
+	"actors": [
+		{
+			"type": "Actor",
+			"name": "skybox",
+			"persistent": true,
+			"active": false,
+			"transform": {
+				"position": [ 0, 0, 1 ],
+				"scale": [ 1, 1, 1 ],
+				"rotation": [ 0, 0, 0 ]
+			},
+			"components": [
+				{
+					"type": "ModelComponent",
+					"modelName": "models/cube.obj",
+					"materialName": "materials/skybox.mtrl",
+					"enableDepth": false,
+					"cullface": "front"
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "light1",
+			"persistent": true,
+			"transform": {
+				"position": [ 5, 0, 0 ],
+				"scale": [ 1, 1, 1 ],
+				"rotation": [ 0, 0, 0 ]
+			},
+			"components": [
+				{
+					"type": "LightComponent",
+					"lightType": "Point",
+					"color": [ 1, 1, 1, 1 ],
+					"intensity": 1,
+					"range": 20,
+					"innerAngle": 20,
+					"outerAngle": 30
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "house",
+			"persistent": true,
+			"active": true,
+			"transform": {
+				"position": [ -14.8, -10, 14.6 ],
+				"scale": [ 1, 1, 1 ],
+				"rotation": [ 0, 0, 0 ]
+			},
+			"components": [
+				{
+					"type": "ModelComponent",
+					"modelName": "Simple_Fantasy_SourceFiles/obj/SF_Bld_Elven_House_01.obj",
+					"materialName": "Simple_Fantasy_SourceFiles/fantasy.mtrl"
+				},
+				{
+					"type": "RotateComponent",
+					"rotation": [ 0, 0, 0 ]
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "tower",
+			"persistent": true,
+			"active": true,
+			"transform": {
+				"position": [ 0, -7, 30 ],
+				"scale": [ 1, 1, 1 ],
+				"rotation": [ 0, 0, 0 ]
+			},
+			"components": [
+				{
+					"type": "ModelComponent",
+					"modelName": "Simple_Fantasy_SourceFiles/obj/SF_Bld_WizardsTower_01.obj",
+					"materialName": "Simple_Fantasy_SourceFiles/fantasy.mtrl"
+				},
+				{
+					"type": "RotateComponent",
+					"rotation": [ 0, 0, 0 ]
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "ground",
+			"persistent": true,
+			"active": true,
+			"transform": {
+				"position": [ -35.7, -7, 50.7 ],
+				"scale": [ 5, 1, 5 ],
+				"rotation": [ 0, 0, 0 ]
+			},
+			"components": [
+				{
+					"type": "ModelComponent",
+					"modelName": "Simple_Fantasy_SourceFiles/obj/SF_Env_Tile_Grass_01.obj",
+					"materialName": "Simple_Fantasy_SourceFiles/fantasy.mtrl"
+				},
+				{
+					"type": "RotateComponent",
+					"rotation": [ 0, 0, 0 ]
+				}
+			]
+		}
+	]
+}

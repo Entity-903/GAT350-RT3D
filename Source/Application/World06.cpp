@@ -80,7 +80,7 @@ namespace nc
                 }
                 else
                 {
-                    m_params ^= INVERT_MASK;
+                    m_params &= ~INVERT_MASK;
                 }
             }
 
@@ -93,7 +93,7 @@ namespace nc
                 }
                 else
                 {
-                    m_params ^= GRAYSCALE_MASK;
+                    m_params &= ~GRAYSCALE_MASK;
                 }
             }
 
@@ -106,9 +106,12 @@ namespace nc
                 }
                 else
                 {
-                    m_params ^= COLORTINT_MASK;
+                    m_params &= ~COLORTINT_MASK;
                 }
             }
+
+
+
             ImGui::ColorEdit3("Colortint Value", glm::value_ptr(m_colorTint));
             ImGui::End();
 
