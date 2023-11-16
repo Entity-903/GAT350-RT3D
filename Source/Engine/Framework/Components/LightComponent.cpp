@@ -23,6 +23,18 @@ namespace nc
 		program->SetUniform(name + ".range", range);
 		program->SetUniform(name + ".innerAngle", glm::radians(innerAngle));
 		program->SetUniform(name + ".outerAngle", glm::radians(outerAngle));
+
+		if (castShadow)
+		{
+			glm::mat4 bias = glm::mat4(
+				glm::vec4(0.5f, 0.0f, 0.0f, 0.0f),
+				glm::vec4(0.0f, 0.5f, 0.0f, 0.0f),
+				glm::vec4(0.0f, 0.0f, 0.5f, 0.0f),
+				glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+
+			program->SetUniform("shadowVP", bias * GetShadowMatrix());
+			program->SetUniform("shadowBias", shadowBias);
+		}
 	}
 
 	void LightComponent::ProcessGui()
@@ -40,25 +52,38 @@ namespace nc
 		ImGui::DragFloat("Intensity", &intensity, 0.1f, 0, 10);
 		if (lightType != Directional) ImGui::DragFloat("Range", &range, 0.1f, 0.1f, 50);
 
+		ImGui::Checkbox("Cast Shadow", &castShadow);
+		if (castShadow)
+		{
+			ImGui::DragFloat("Shadow Size", &shadowSize, 0.1f, 1, 60);
+			ImGui::DragFloat("Shadow Bias", &shadowBias, 0.001f, 0, 0.5f);
+		}
+	}
 
+	glm::mat4 LightComponent::GetShadowMatrix()
+	{
+		glm::mat4 projection = glm::ortho(-shadowSize * 0.5f, shadowSize * 0.5f, -shadowSize * 0.5f, shadowSize * 0.5f, 0.1f, 50.0f);
+		glm::mat4 view = glm::lookAt(m_owner->transform.position, m_owner->transform.position + m_owner->transform.Forward(), m_owner->transform.Up());
+
+		return projection * view;
 	}
 
 	void LightComponent::Read(const nc::json_t& value)
 	{
 		// read json file
-		std::string lightType = "";
+		std::string type = "";
 
-		READ_DATA(value, lightType);
+		READ_NAME_DATA(value, "lightType", type);
 
-		if (lightType == "Point")
+		if (StringUtils::IsEqualIgnoreCase(type, "point"))
 		{
 			lightType = lightType::Point;
 		}
-		if (lightType == "Directional")
+		else if (StringUtils::IsEqualIgnoreCase(type, "directional"))
 		{
 			lightType = lightType::Directional;
 		}
-		if (lightType == "Spot")
+		else if (StringUtils::IsEqualIgnoreCase(type, "spot"))
 		{
 			lightType = lightType::Spot;
 		}
@@ -68,5 +93,7 @@ namespace nc
 		READ_DATA(value, range);
 		READ_DATA(value, innerAngle);
 		READ_DATA(value, outerAngle);
+
+		READ_DATA(value, castShadow);
 	}
 }

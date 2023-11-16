@@ -17,23 +17,33 @@ namespace nc
         m_scene->Initialize();
 
         auto texture = std::make_shared<Texture>();
-        texture->CreateTexture(1024, 1024);
-        ADD_RESOURCE(Texture, "fb_texture", texture);
+        texture->CreateDepthTexture(1024, 1024);
+        ADD_RESOURCE(Texture, "depth_texture", texture);
 
         auto framebuffer = std::make_shared<Framebuffer>();
-        framebuffer->CreateFramebuffer(texture);
-        ADD_RESOURCE(Framebuffer, "fb", framebuffer);
+        framebuffer->CreateDepthBuffer(texture);
+        ADD_RESOURCE(Framebuffer, "depth_buffer", framebuffer);
 
-        auto material = GET_RESOURCE(Material, "materials/postprocess.mtrl");
+        // set texture to debug sprite
+        auto material = GET_RESOURCE(Material, "materials/sprite.mtrl"); // sprite
         if (material != nullptr)
         {
             material->albedoTexture = texture;
         }
 
+        auto materials = GET_RESOURCES(Material);
+        for (auto material : materials)
+        {
+            material->depthTexture = texture;
+        }
+
+        // Move this into the json file
+        // Note to self: Increase the z value of light to show tower and house shadow when ground is inactive
+        // Rotate light on x to reveal shadows
         {
             auto actor = CREATE_CLASS(Actor);
             actor->name = "camera1";
-            actor->transform.position = glm::vec3{ 0, 0, 3 };
+            actor->transform.position = glm::vec3{ 0, 0, 30 };
             actor->transform.rotation = glm::radians(glm::vec3{ 0, 180, 0 });
 
             auto cameraComponent = CREATE_CLASS(CameraComponent);
@@ -49,6 +59,7 @@ namespace nc
 
             m_scene->Add(std::move(actor));
         }
+        // Move this into the json file
 
         return true;
     }
@@ -64,76 +75,42 @@ namespace nc
         m_scene->Update(dt);
         m_scene->ProcessGui();
 
-        //auto program = GET_RESOURCE(Program, "Shaders/postprocess.prog");
-        //if (program != nullptr)
-        //{
-        //    program->Use();
-
-        //    ImGui::Begin("Post Processing");
-        //    ImGui::SliderFloat("Blend", &m_blend, 0, 1);
-        //    bool effect = m_params & INVERT_MASK;
-        //    if (ImGui::Checkbox("Invert", &effect))
-        //    {
-        //        if (effect)
-        //        {
-        //            m_params |= INVERT_MASK;
-        //        }
-        //        else
-        //        {
-        //            m_params &= ~INVERT_MASK;
-        //        }
-        //    }
-
-        //    effect = m_params & GRAYSCALE_MASK;
-        //    if (ImGui::Checkbox("Grayscale", &effect))
-        //    {
-        //        if (effect)
-        //        {
-        //            m_params |= GRAYSCALE_MASK;
-        //        }
-        //        else
-        //        {
-        //            m_params &= ~GRAYSCALE_MASK;
-        //        }
-        //    }
-
-        //    effect = m_params & COLORTINT_MASK;
-        //    if (ImGui::Checkbox("Colortint", &effect))
-        //    {
-        //        if (effect)
-        //        {
-        //            m_params |= COLORTINT_MASK;
-        //        }
-        //        else
-        //        {
-        //            m_params &= ~COLORTINT_MASK;
-        //        }
-        //    }
-        //    ImGui::ColorEdit3("Colortint Value", glm::value_ptr(m_colorTint));
-        //    ImGui::End();
-
-        //    program->SetUniform("blend", m_blend);
-        //    program->SetUniform("params", m_params);
-        //    program->SetUniform("tint", m_colorTint);
-
-        //}
-
         ENGINE.GetSystem<Gui>()->EndFrame();
     }
 
     void World07::Draw(Renderer& renderer)
     {
-        //// ** PASS 1 **
-        //m_scene->GetActorByName("postprocess")->active = false;
+        // ** PASS 1 **
+        auto framebuffer = GET_RESOURCE(Framebuffer, "depth_buffer");
+        renderer.SetViewport(framebuffer->GetSize().x, framebuffer->GetSize().y);
+        framebuffer->Bind();
 
-        //auto framebuffer = GET_RESOURCE(Framebuffer, "fb");
-        //renderer.SetViewport(framebuffer->GetSize().x, framebuffer->GetSize().y);
-        //framebuffer->Bind();
+        renderer.ClearDepth();
+        auto program = GET_RESOURCE(Program, "shaders/shadow_depth.prog");
+        program->Use();
 
-        //renderer.BeginFrame(glm::vec3(0, 0, 0));
-        //m_scene->Draw(renderer);
+        auto lights = m_scene->GetComponents<LightComponent>();
+        for (auto light : lights)
+        {
+            if (light->castShadow)
+            {
+                glm::mat4 shadowMatrix = light->GetShadowMatrix();
+                program->SetUniform("shadowVP", shadowMatrix);
+            }
+        }
 
-        //framebuffer->Unbind();
+        auto models = m_scene->GetComponents<ModelComponent>();
+        for (auto model : models)
+        {
+            if (model->castShadow)
+            {
+            //glCullFace(GL_FRONT);
+            program->SetUniform("model", model->m_owner->transform.GetMatrix());
+            model->model->Draw();
+            }
+        }
+
+        framebuffer->Unbind();
 
         // ** PASS 2 **
         renderer.ResetViewport();

@@ -12,9 +12,12 @@ namespace nc
 	class World06 : public World
 	{
 	public:
-		const uint32_t INVERT_MASK    = 1;
-		const uint32_t GRAYSCALE_MASK = 2;
-		const uint32_t COLORTINT_MASK = 4;
+		const uint32_t INVERT_MASK     = (1 << 0);
+		const uint32_t GRAYSCALE_MASK  = (1 << 1);
+		const uint32_t COLORTINT_MASK  = (1 << 2);
+		const uint32_t GRAIN_MASK      = (1 << 3);
+		const uint32_t SCANLINE_MASK  = (1 << 4);
+		const uint32_t EXTREMERGB_MASK = (1 << 5);
 
 	public:
 		bool Initialize() override;

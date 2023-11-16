@@ -110,9 +110,48 @@ namespace nc
                 }
             }
 
-
-
             ImGui::ColorEdit3("Colortint Value", glm::value_ptr(m_colorTint));
+
+            effect = m_params & GRAIN_MASK;
+            if (ImGui::Checkbox("Grain", &effect))
+            {
+                if (effect)
+                {
+                    m_params |= GRAIN_MASK;
+                }
+                else
+                {
+                    m_params &= ~GRAIN_MASK;
+                }
+            }
+
+            effect = m_params & SCANLINE_MASK;
+            if (ImGui::Checkbox("Scanline", &effect))
+            {
+                if (effect)
+                {
+                    m_params |= SCANLINE_MASK;
+                }
+                else
+                {
+                    m_params &= ~SCANLINE_MASK;
+                }
+            }
+
+            effect = m_params & EXTREMERGB_MASK;
+            if (ImGui::Checkbox("Extreme red, green, and blue", &effect))
+            {
+                if (effect)
+                {
+                    m_params |= EXTREMERGB_MASK;
+                }
+                else
+                {
+                    m_params &= ~EXTREMERGB_MASK;
+                }
+            }
+
+
             ImGui::End();
 
             program->SetUniform("blend", m_blend);

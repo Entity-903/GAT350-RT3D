@@ -37,12 +37,20 @@ namespace nc
 		model->Draw();
 	}
 
+	void ModelComponent::ProcessGui()
+	{
+		ImGui::Checkbox("Cast Shadow", &castShadow);
+		ImGui::Checkbox("Enable Depth", &enableDepth);
+	}
+
 	void ModelComponent::Read(const json_t& value)
 	{
 		READ_DATA(value, modelName);
 		READ_DATA(value, materialName);
 
 		READ_DATA(value, enableDepth); 
+		READ_DATA(value, castShadow);
+
 		std::string cullfaceName;
 		READ_NAME_DATA(value, "cullface", cullfaceName);
 		if (StringUtils::IsEqualIgnoreCase(cullfaceName, "front")) cullface = GL_FRONT;

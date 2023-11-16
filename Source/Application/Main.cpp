@@ -1,18 +1,9 @@
-#include "World07.h"
+#include "World06.h"
 #include "Core/Core.h"
 #include "Framework/Framework.h"
 #include "Renderer/Renderer.h"
 
-/* Changes to make 11/09/2023
-
-World06 (.h & .cpp)
-ResourseManager.h
-Dupe unlit_texture and refer to as postprocess; Make proper changes to duplicated
-scene.json
-texture.cpp
-
-*/
-
+// Somehow... someway... The LightComponent is not being read from the json. This results in the program starting with default light values
 
 using namespace std;
 
@@ -27,7 +18,7 @@ int main(int argc, char* argv[])
 
 	ENGINE.Initialize();
 
-	auto world = make_unique<nc::World07>();
+	auto world = make_unique<nc::World06>();
 	world->Initialize();
 
 	

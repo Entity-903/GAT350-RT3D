@@ -113,6 +113,12 @@ namespace nc
 			cubemapTexture->Bind();
 		}
 
+		if (depthTexture)
+		{
+			depthTexture->SetActive(GL_TEXTURE5);
+			depthTexture->Bind();
+		}
+
 	}
 	void Material::ProcessGui()
 	{

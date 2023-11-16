@@ -8,7 +8,8 @@
 #include <string>
 #include <vector>
 
-#define GET_RESOURCE(type, filename, ...) nc::ResourceManager::Instance().Get<type>(filename, __VA_ARGS__)
+#define GET_RESOURCE(type, filename, ...)  nc::ResourceManager::Instance().Get<type>(filename, __VA_ARGS__)
+#define GET_RESOURCES(type)                nc::ResourceManager::Instance().GetAllOfType<type>();
 #define ADD_RESOURCE(type, name, resource) nc::ResourceManager::Instance().Add<type>(name, resource)
 
 namespace nc

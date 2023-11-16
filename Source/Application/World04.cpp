@@ -74,7 +74,7 @@ namespace nc
         ImGui::DragFloat("Intensity", &m_lights[m_selected].intensity, 0.1f, 0, 10);
         ImGui::ColorEdit3("Color", glm::value_ptr(m_lights[m_selected].color));
 
-        ImGui::ColorEdit3("ambientLight", glm::value_ptr(ambientLight), 0.1f);
+        ImGui::ColorEdit3("ambientLight", glm::value_ptr(ambientLight));
         ImGui::End();
 
         m_transform.position.x += ENGINE.GetSystem<InputSystem>()->GetKeyDown(SDL_SCANCODE_A) ? m_speed * -dt : 0;

@@ -47,7 +47,7 @@
 			"persistent": true,
 			"active": true,
 			"transform": {
-				"position": [ -1.5, 0, 1 ],
+				"position": [ 0, 0, 0 ],
 				"scale": [ 1, 1, 1 ],
 				"rotation": [ 0, 0, 0 ]
 			},
@@ -56,10 +56,6 @@
 					"type": "ModelComponent",
 					"modelName": "models/ogre.obj",
 					"materialName": "materials/ogre.mtrl"
-				},
-				{
-					"type": "RotateComponent",
-					"rotation": [ 0, 90, 0 ]
 				}
 			]
 		},
