@@ -1,9 +1,9 @@
-#include "World06.h"
+#include "World07.h"
 #include "Core/Core.h"
 #include "Framework/Framework.h"
 #include "Renderer/Renderer.h"
 
-// Somehow... someway... The LightComponent is not being read from the json. This results in the program starting with default light values
+// Something is overriding the rotation of the camera being set from the json or ImGui
 
 using namespace std;
 
@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 
 	ENGINE.Initialize();
 
-	auto world = make_unique<nc::World06>();
+	auto world = make_unique<nc::World07>();
 	world->Initialize();
 
 	

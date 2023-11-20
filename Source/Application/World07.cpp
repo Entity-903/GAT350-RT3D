@@ -37,30 +37,6 @@ namespace nc
             material->depthTexture = texture;
         }
 
-        // Move this into the json file
-        // Note to self: Increase the z value of light to show tower and house shadow when ground is inactive
-        // Rotate light on x to reveal shadows
-        {
-            auto actor = CREATE_CLASS(Actor);
-            actor->name = "camera1";
-            actor->transform.position = glm::vec3{ 0, 0, 30 };
-            actor->transform.rotation = glm::radians(glm::vec3{ 0, 180, 0 });
-
-            auto cameraComponent = CREATE_CLASS(CameraComponent);
-            cameraComponent->SetPerspective(70.0f, ENGINE.GetSystem<Renderer>()->GetWidth() / (float)ENGINE.GetSystem<Renderer>()->GetHeight(), 0.1f, 100.0f);
-            actor->AddComponent(std::move(cameraComponent));
-
-            auto cameraController = CREATE_CLASS(CameraController);
-            cameraController->speed = 5;
-            cameraController->sensitivity = 0.5f;
-            cameraController->m_owner = actor.get();
-            cameraController->Initialize();
-            actor->AddComponent(std::move(cameraController));
-
-            m_scene->Add(std::move(actor));
-        }
-        // Move this into the json file
-
         return true;
     }
 
