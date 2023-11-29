@@ -48,7 +48,7 @@ namespace nc
 				actor->name = StringUtils::CreateUnique(actor->GetClassName());
 				actor->Initialize();
 
-				selectedObject = actor.get();
+				m_selected = actor.get();
 				scene->Add(std::move(actor));
 			}
 
@@ -62,7 +62,7 @@ namespace nc
 				}
 				actor->Initialize();
 
-				selectedObject = actor.get();
+				m_selected = actor.get();
 				scene->Add(std::move(actor));
 			}
 
@@ -76,7 +76,7 @@ namespace nc
 				}
 				actor->Initialize();
 
-				selectedObject = actor.get();
+				m_selected = actor.get();
 				scene->Add(std::move(actor));
 			}
 
@@ -90,7 +90,7 @@ namespace nc
 				}
 				actor->Initialize();
 
-				selectedObject = actor.get();
+				m_selected = actor.get();
 				scene->Add(std::move(actor));
 			}
 
@@ -104,7 +104,7 @@ namespace nc
 				}
 				actor->Initialize();
 
-				this->selectedObject = actor.get();
+				m_selected = actor.get();
 				scene->Add(std::move(actor));
 			}
 
