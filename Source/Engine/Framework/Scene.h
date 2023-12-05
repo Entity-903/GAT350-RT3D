@@ -17,9 +17,9 @@ namespace nc
 		void Update(float dt);
 		void Draw(Renderer& renderer);
 
-		void Add(std::unique_ptr<Actor> actor);
+		void Add(std::unique_ptr<Actor> actor, Actor* prevActor = nullptr);
 		void RemoveAll(bool force = false);
-		void Remove(Actor* actor);
+		void Remove(nc::Actor* actor);
 
 		bool Load(const std::string& filename);
 		void Read(const json_t& value);
@@ -36,6 +36,7 @@ namespace nc
 
 		friend class Actor;
 		friend class Editor;
+
 
 	public:
 		glm::vec3 ambientColor{ 0.2f };

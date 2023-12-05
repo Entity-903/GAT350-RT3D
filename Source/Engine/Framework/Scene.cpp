@@ -1,11 +1,9 @@
 #include "Scene.h"
-#include "Framework/Components/CollisionComponent.h"
-#include "Framework/Components/LightComponent.h"
-#include "Components/CameraComponent.h"
+#include "Framework.h"
 
 namespace nc
 {
-	bool Scene::Initialize()
+	bool nc::Scene::Initialize()
 	{
 		for (auto& actor : m_actors) actor->Initialize();
 
@@ -24,7 +22,7 @@ namespace nc
 		}
 	}
 
-	void Scene::Draw(Renderer& renderer)
+	void nc::Scene::Draw(Renderer& renderer)
 	{
 
 		// get light components
@@ -65,14 +63,28 @@ namespace nc
 		}
 	}
 
-	void Scene::Add(std::unique_ptr<Actor> actor)
+	void nc::Scene::Add(std::unique_ptr<Actor> actor, Actor* prevActor)
 	{
 		actor->m_scene = this;
 		actor->m_game = m_game;
-		m_actors.push_back(std::move(actor));
+		// check if previous actor pointer providied
+		if (prevActor)
+		{
+			// find previous actor iterator
+			auto iter = std::find_if(m_actors.begin(), m_actors.end(), [prevActor](auto& actor) { return actor.get() == prevActor; });
+			// if previous actor found, set iterator to next element
+			iter = (iter != m_actors.end()) ? std::next(iter) : iter;
+			// insert new actor (before iterator)
+			m_actors.insert(iter, std::move(actor));
+		}
+		else
+		{
+			// previous actor pointer not provided, add to back of the container
+			m_actors.push_back(std::move(actor));
+		}
 	}
 
-	void Scene::RemoveAll(bool force)
+	void nc::Scene::RemoveAll(bool force)
 	{
 		auto iter = m_actors.begin();
 		while (iter != m_actors.end())
@@ -81,7 +93,7 @@ namespace nc
 		}
 	}
 
-	void Scene::Remove(Actor* actor)
+	void nc::Scene::Remove(nc::Actor* actor)
 	{
 		auto iter = m_actors.begin();
 		while (iter != m_actors.end())
@@ -95,10 +107,10 @@ namespace nc
 		}
 	}
 
-	bool Scene::Load(const std::string& filename)
+	bool nc::Scene::Load(const std::string& filename)
 	{
 		rapidjson::Document document;
-		if (!Json::Load(filename, document))
+		if (!nc::Json::Load(filename, document))
 		{
 			ERROR_LOG("Could not load scene file: " << filename);
 			return false;
@@ -109,7 +121,7 @@ namespace nc
 		return true;
 	}
 
-	void Scene::Read(const json_t& value)
+	void nc::Scene::Read(const json_t& value)
 	{
 		if (HAS_DATA(value, actors) && GET_DATA(value, actors).IsArray())
 		{
@@ -124,7 +136,7 @@ namespace nc
 				if (actor->prototype)
 				{
 					std::string name = actor->name;
-					Factory::Instance().RegisterPrototype(name, std::move(actor));
+					nc::Factory::Instance().RegisterPrototype(name, std::move(actor));
 				}
 				else
 				{
@@ -135,7 +147,7 @@ namespace nc
 
 	}
 
-	void Scene::ProcessGui()
+	void nc::Scene::ProcessGui()
 	{
 		float fps = 1 / m_dt;
 		float ms = 1000 * m_dt;

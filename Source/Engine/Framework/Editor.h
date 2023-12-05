@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Core/StringUtils.h"
+
 namespace nc
 {
 	class Editor
@@ -12,5 +14,6 @@ namespace nc
 	private:
 		bool active = true;
 		class Object* m_selected = nullptr;
+		class Object* m_rename = nullptr;
 	};
 }
